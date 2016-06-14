@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Leap Web Site</title>
+ 	<!-- You should update these links to point to your local files! -->
+ 
+    <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="css/leapstrap.css" />
+    <!-- Custom styles for this template -->
+  
+     
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/leap.js"></script>
+	<script type="text/javascript" src="js/jsmodeler.js"></script>
+	<script type="text/javascript" src="js/three.min.js"></script>
+	<script type="text/javascript" src="js/jsmodeler.ext.three.js"></script>
+	<script type="text/javascript" src="js/gvg.js"></script>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="{{ page.base_url }}docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+<div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Geometry via Gestures</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          
+        </div><!--/.navbar-collapse -->
+    </div>
+<br><br>
+
+	<div class="row">
+		<div class="col-md-12">
+			Use your hands to make this circle a cylinder.
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8"> <!-- 		Figure Appears here    -->
+			        <p></p>
+			<p>
+			<canvas id="example" class="leap-interactive" width="600" height="300"></canvas>
+			
+		
+			<script>
+			(function(){
+				initialiseCanvas("example","task3");
+				var cylinderBody = JSM.GenerateCylinder (0.5, 0.04,100,true, false);
+				AddBodyToViewer(cylinderBody);
+			})();
+			</script>
+	
+		</div>
+		<div class="col-md-4">
+			<div class="row">
+				<div class="col-md-12">
+					<!--Assessments appear here -->
+				</div>
+				<div class="col-md-12">
+					<!--Hints appear here -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div> <!-- /container -->
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="js/leapstrap.js"></script>
+<script>
+LeapManager.init({
+enableMetaGestures: false,
+enableDefaultMetaGestureActions: false,
+maxCursors:1,
+enableHoverTap: true,
+enablePressDown: true,
+enableScrollbarScrolling: true,
+});
+
+var controllerOptions = {enableGestures: true};
+var x=1;
+var y=2;
+// Stack or unstack operations
+Leap.loop(controllerOptions, function(frame) {
+  // Display Gesture object data
+  if (frame.gestures.length > 0) {
+    for (var i = 0; i < frame.gestures.length; i++) {
+      var gesture = frame.gestures[i];
+      if(gesture.type == "swipe") {
+          //Classify swipe as either horizontal or vertical
+          var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+          //Classify as right-left or up-down
+          if(isHorizontal){
+              
+          } else { //vertical
+              if(gesture.direction[1] > 0){
+                  swipeDirection = "up";
+		  x+=0.1;
+		  //console.log(x);
+		  if(x>y){
+			  x=1;y=2;
+			  stackCylinder();
+		  }
+              } else {
+                  swipeDirection = "down";
+              }                  
+          }
+          console.log(swipeDirection)
+       }
+     }
+  }
+
+});
+
+
+// This function is used to check if the hand is pointed with the object
+function aligned(frame){
+var interactionBox = frame.interactionBox;
+if(frame.pointables.length > 0){
+
+        //Leap coordinates
+        var tipPosition = frame.pointables[0].tipPosition;
+        
+        //Normalized coordinates
+        var normalizedPosition = interactionBox.normalizePoint(tipPosition, true);
+        
+        //Pixel coordinates in current window
+        var windowPosition = [normalizedPosition[0] * window.innerWidth, 
+                              window.innerHeight - (normalizedPosition[1] * window.innerHeight), 
+                              0];
+	if(windowPosition[0]>=300 && windowPosition[0]<=600  && windowPosition[1]>=10 && windowPosition[1]<=300)
+	        //console.log(vectorToString(windowPosition, 0));        
+	return true;
+	else return false;
+}
+
+}
+
+function vectorToString(vector, digits) {
+  if (typeof digits === "undefined") {
+    digits = 1;
+  }
+  return "(" + vector[0].toFixed(digits) + ", "
+             + vector[1].toFixed(digits) + ", "
+             + vector[2].toFixed(digits) + ")";
+}
+</script>
+  </body>
+</html>
