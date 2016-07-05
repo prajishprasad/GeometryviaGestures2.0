@@ -47,10 +47,10 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary panel-leap">
 				<div class="panel-heading">
-					Activity 1
+					Activity 3
 				</div>
 				<div class="panel-body">
-					Use your hands to make this rectangle a cylinder.
+					Use your hands to make this circle a cylinder.
 				</div>
 			</div>
 		</div>
@@ -61,14 +61,14 @@
 				<div class="panel-body">
 				<p></p>
 			<p>
-			<canvas id="example" class="" width="600" height="350"></canvas>
+			<canvas id="example" class="" width="600" height="300"></canvas>
 			
 		
 			<script>
 			(function(){
-				initialiseCanvas("example");
-				var rectangleBody=createRectangle();
-				AddBodyToViewer(rectangleBody);
+				initialiseCanvas("example","task3");
+				var cylinderBody = JSM.GenerateCylinder (0.5, 0.01,100,true, false);
+				AddBodyToViewer(cylinderBody);
 			})();
 			</script>
 				</div>
@@ -90,10 +90,9 @@
 						</div>
 						<div id="hintPanelFooter" style="display:none;" class="panel-footer" >
 						<div class="alert alert-leap alert-success alert-dismissable leap-interactive" leap-disable-tap="true">
-							<button type="button" class="close leap-interactive" data-dismiss="alert" aria-hidden="true">&times;</button> <strong>Well done!</strong>You can proceed to the next activity or do this activity again. 
+							<button type="button" class="close leap-interactive" data-dismiss="alert" aria-hidden="true">&times;</button> <strong>Well done!</strong>
 						</div>
-<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity2.html">Proceed&raquo;</a>&nbsp;&nbsp;&nbsp;
-<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity1.html">Restart</a>
+		<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity3.html">Restart</a>
 						</div>
 					</div>
 				</div>
@@ -103,7 +102,7 @@
 					<br>
 						<div class="panel-body" id="questionPanelBody">
 							<button type="button" class="leap-click btn btn-primary btn-lg btn-block leap-interactive" id="hintButton" onclick="showGif();">Hint</button>       
-								<img id="gestureGif" style="display:none;" src="images/side_swipe.gif" width="300px" heigth="300px"></img>
+								<img id="gestureGif" style="display:none;" src="images/up_swipe.gif" width="300px" heigth="300px"></img>
 
 						</div>
 					</div>
@@ -151,25 +150,25 @@ Leap.loop(controllerOptions, function(frame) {
           var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
           //Classify as right-left or up-down
           if(isHorizontal){
-              if(gesture.direction[0] <= 0){
-                  swipeDirection = "left";
-		  x+=0.05;
+              
+          } else { //vertical
+              if(gesture.direction[1] > 0){
+                  swipeDirection = "up";
+		  x+=0.1;
 		  //console.log(x);
 		  if(x>y){
 			  x=1;y=2;
-			  rotate("right");
+			  stackCylinder();
 			  height+=1;
-			  $("#progressBar").css( "width", eval(20+height*10)+"%" );
-			  if((20+height*10)>=100){
+			  $("#progressBar").css( "width", eval(20+height*2)+"%" );
+			  if((20+height*2)>=100){
 				hintGeneration(2);
 			  }
 			  console.log(height);
 		  }
               } else {
                   swipeDirection = "down";
-              }
-          } else { //vertical
-                                
+              }                  
           }
           console.log(swipeDirection)
        }
@@ -213,10 +212,10 @@ function hintGeneration(level){
 var html="";
 switch(level){
 	case 0:
-		html="Move your hand to the rectangle";
+		html="Move your hand over the circle";
 		break;
 	case 1:
-		html="Use the gesture shown below to make this rectangle a cylinder.";
+		html="Use the gesture shown below to make this circle a cylinder.";
 		break;
 	case 2:
 		html="Well done! You have completed this activity";

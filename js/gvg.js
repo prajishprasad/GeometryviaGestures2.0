@@ -1,7 +1,7 @@
 var slice_flag=false;
-var final_degree=1;
+var final_degree=0.01;
 var task2_index=200;
-var activity2_index=0.05;
+var activity2_index=0.02;
 var activity1_index=0.02;
 var viewer;
 var canvas;
@@ -32,10 +32,9 @@ createRectangle=function(){
 
 	body = new JSM.Body ();			
 	body.AddVertex (new JSM.BodyVertex (new JSM.Coord (0.0, 0.0, 0.0)));
-	body.AddVertex (new JSM.BodyVertex (new JSM.Coord (0.25, 0.0, 0.0)));
-	body.AddVertex (new JSM.BodyVertex (new JSM.Coord (0.25, 0.0, 0.5)));
-	body.AddVertex (new JSM.BodyVertex (new JSM.Coord (0.0, 0.0, 0.5)));
-
+	body.AddVertex (new JSM.BodyVertex (new JSM.Coord (0.55, 0.0, 0.0)));
+	body.AddVertex (new JSM.BodyVertex (new JSM.Coord (0.55, 0.0, -1.0)));
+	body.AddVertex (new JSM.BodyVertex (new JSM.Coord (0.0, 0.0, -1.0)));
 	body.AddPolygon (new JSM.BodyPolygon ([0, 1, 2, 3]));
 	return body;
 
@@ -44,7 +43,7 @@ createRectangle=function(){
 rotate=function(direction){
 	var transformation;
 	if(direction=="right"){
-		for(degree = final_degree; degree < final_degree+0.2; degree+=0.02){
+		for(degree = final_degree; degree < final_degree+0.02; degree+=0.002){
 			transformation = JSM.RotationZTransformation (degree,new JSM.Coord (0,0,0));
 			body.Transform (transformation);
 			AddBodyToViewer (body);
@@ -94,13 +93,13 @@ smash=function(direction){
 }
 
 stackCylinder=function(){
-	var cylinderBody = JSM.GenerateCylinder (0.5, 0.04,100,true, false);
+	var cylinderBody = JSM.GenerateCylinder (0.5, 0.01,100,true, false);
 	var addition = JSM.TranslationTransformation (new JSM.Coord (0.0, 0.0, activity2_index));
 	var transformation = new JSM.Transformation ();
 	transformation.Append (addition);
 	cylinderBody.Transform (transformation);
 	AddBodyToViewer(cylinderBody);
-	activity2_index+=0.05;
+	activity2_index+=0.02;
 }
 
 stackCuboid=function(){

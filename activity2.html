@@ -45,32 +45,66 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			Use your hands to make this circle a cylinder.
+			<div class="panel panel-primary panel-leap">
+				<div class="panel-heading">
+					Activity 2
+				</div>
+				<div class="panel-body">
+					Use your hands to make this rectangle a cuboid.
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-8"> <!-- 		Figure Appears here    -->
-			        <p></p>
+			<div class="panel panel-primary panel-leap">
+				<div class="panel-body">
+				<p></p>
 			<p>
-			<canvas id="example" class="leap-interactive" width="600" height="300"></canvas>
+			<canvas id="example" class="" width="600" height="300"></canvas>
 			
 		
 			<script>
 			(function(){
 				initialiseCanvas("example","task3");
-				var cylinderBody = JSM.GenerateCylinder (0.5, 0.04,100,true, false);
-				AddBodyToViewer(cylinderBody);
+				var cuboidBody = new JSM.GenerateCuboid (1, 1, 0.01);
+				AddBodyToViewer(cuboidBody);
 			})();
 			</script>
+				</div>
+			</div>
 	
 		</div>
 		<div class="col-md-4">
 			<div class="row">
 				<div class="col-md-12">
-					<!--Assessments appear here -->
+					<div class="progress progress-striped active">
+							  <div class="bar" id="progressBar" style="width: 0%;"></div>
+
+					</div>
+
+					<!--Hints appear here -->
+					<div class="panel panel-primary panel-leap">
+						<div class="panel-body" id="hintPanelBody">
+							
+						</div>
+						<div id="hintPanelFooter" style="display:none;" class="panel-footer" >
+						<div class="alert alert-leap alert-success alert-dismissable leap-interactive" leap-disable-tap="true">
+							<button type="button" class="close leap-interactive" data-dismiss="alert" aria-hidden="true">&times;</button> <strong>Well done!</strong> You can proceed to the next activity or do this activity again. 
+						</div>
+						<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity3.html">Proceed&raquo;</a>&nbsp;&nbsp;&nbsp;<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity2.html">Restart</a>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-12">
-					<!--Hints appear here -->
+					<!--Assessments appear here -->
+					<div class="panel panel-primary panel-leap">
+					<br>
+						<div class="panel-body" id="questionPanelBody">
+<button type="button" class="leap-click btn btn-primary btn-lg btn-block leap-interactive" id="hintButton" onclick="showGif();">Hint</button>       
+								<img id="gestureGif" style="display:none;" src="images/up_swipe.gif" width="300px" heigth="300px"></img>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -95,8 +129,17 @@ enableScrollbarScrolling: true,
 var controllerOptions = {enableGestures: true};
 var x=1;
 var y=2;
+var height=0;
+var z=10;
+hintGeneration(0);
+var firstTime=true;
 // Stack or unstack operations
 Leap.loop(controllerOptions, function(frame) {
+    if(firstTime && aligned(frame)){ // Initial hint - Bring your hand near the rectangle
+	$("#progressBar").css( "width", "20%" );
+	hintGeneration(1);
+	firstTime=false;
+    }
   // Display Gesture object data
   if (frame.gestures.length > 0) {
     for (var i = 0; i < frame.gestures.length; i++) {
@@ -114,7 +157,13 @@ Leap.loop(controllerOptions, function(frame) {
 		  //console.log(x);
 		  if(x>y){
 			  x=1;y=2;
-			  stackCylinder();
+			  stackCuboid();
+			  height+=1;
+			  $("#progressBar").css( "width", eval(20+height*2)+"%" );
+			  if((20+height*2)>=100){
+				hintGeneration(2);
+			  }
+			  console.log(height);
 		  }
               } else {
                   swipeDirection = "down";
@@ -126,8 +175,6 @@ Leap.loop(controllerOptions, function(frame) {
   }
 
 });
-
-
 // This function is used to check if the hand is pointed with the object
 function aligned(frame){
 var interactionBox = frame.interactionBox;
@@ -158,6 +205,29 @@ function vectorToString(vector, digits) {
   return "(" + vector[0].toFixed(digits) + ", "
              + vector[1].toFixed(digits) + ", "
              + vector[2].toFixed(digits) + ")";
+}
+
+function hintGeneration(level){
+var html="";
+switch(level){
+	case 0:
+		html="Move your hand over the rectangle";
+		break;
+	case 1:
+		html="Use the gesture shown below to make this rectangle a cuboid.";
+		break;
+	case 2:
+		html="Well done! You have completed this activity";
+		$("#hintPanelFooter").show();
+		$("#example").addClass("leap-interactive");
+}
+$("#hintPanelBody").html(html);		
+}
+
+function showGif(){
+	$("#hintButton").hide();
+	$("#gestureGif").show();
+
 }
 </script>
   </body>
