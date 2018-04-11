@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Leap Web Site</title>
+    <title>Activity 2 - Rectangle to Cuboid</title>
  	<!-- You should update these links to point to your local files! -->
  
     <!-- Bootstrap core CSS -->
@@ -56,7 +56,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-8"> <!-- 		Figure Appears here    -->
+		<div class="col-md-8"><!--The Circle appears here -->
 			<div class="panel panel-primary panel-leap">
 				<div class="panel-body">
 				<p></p>
@@ -150,26 +150,28 @@ Leap.loop(controllerOptions, function(frame) {
           //Classify as right-left or up-down
           if(isHorizontal){
               
-          } else { //vertical
-              if(gesture.direction[1] > 0){
+          } else { 
+          //vertical gesture is detected
+          if(gesture.direction[1] > 0){
                   swipeDirection = "up";
 		  x+=0.1;
 		  //console.log(x);
 		  if(x>y){
 			  x=1;y=2;
+			  // function in gvg.js
 			  stackCuboid();
 			  height+=1;
 			  $("#progressBar").css( "width", eval(20+height*2)+"%" );
 			  if((20+height*2)>=100){
 				hintGeneration(2);
 			  }
-			  console.log(height);
+			  //console.log(height);
 		  }
               } else {
                   swipeDirection = "down";
               }                  
           }
-          console.log(swipeDirection)
+          //console.log(swipeDirection)
        }
      }
   }
@@ -191,9 +193,10 @@ if(frame.pointables.length > 0){
                               window.innerHeight - (normalizedPosition[1] * window.innerHeight), 
                               0];
 	if(windowPosition[0]>=300 && windowPosition[0]<=600  && windowPosition[1]>=10 && windowPosition[1]<=300)
-	        //console.log(vectorToString(windowPosition, 0));        
-	return true;
-	else return false;
+	    //console.log(vectorToString(windowPosition, 0));        
+		return true;
+	else 
+		return false;
 }
 
 }
@@ -207,6 +210,7 @@ function vectorToString(vector, digits) {
              + vector[2].toFixed(digits) + ")";
 }
 
+// Based on the level of the progress bar, the type of hints change
 function hintGeneration(level){
 var html="";
 switch(level){

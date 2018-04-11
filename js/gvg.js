@@ -12,7 +12,12 @@ var viewerSettings = {
 		cameraUpVector : [0.0, 0.0, 1.0]
 };
 
+/*
+This function is used in all the activities to initialize the canvas. 
+The canvas is the place where the 2D shapes appear
+*/
 initialiseCanvas=function(id,task){
+	//Change the camera angle for task3
 	if(task=="task3"){
 		viewerSettings = {
 			cameraEyePosition : [-2.0, -1.5, 0.3],
@@ -27,7 +32,9 @@ initialiseCanvas=function(id,task){
 	viewer.Start (canvas, viewerSettings);
 	viewer.navigation.EnableZoom (false);
 }
-
+/*
+This function creates the rectangle for Activity 1 and Activity 2
+*/
 createRectangle=function(){
 
 	body = new JSM.Body ();			
@@ -40,18 +47,7 @@ createRectangle=function(){
 
 }
 
-rotate=function(direction){
-	var transformation;
-	if(direction=="right"){
-		for(degree = final_degree; degree < final_degree+0.02; degree+=0.002){
-			transformation = JSM.RotationZTransformation (degree,new JSM.Coord (0,0,0));
-			body.Transform (transformation);
-			AddBodyToViewer (body);
-		}
-	} 
-	final_degree=degree;
-}
-
+/* This function creates the circle for Activity 3*/
 createCircle = function(){
 	AddBodyToViewer(new JSM.GenerateCuboid(1.0,1.0,1.0));
 
@@ -64,44 +60,34 @@ AddBodyToViewer=function(body)
 	viewer.AddMeshes (meshes);	
 	viewer.Draw();		
 }
+
 removeMeshes=function(){
 	viewer.RemoveMeshes ();
 }
 
-slice=function(){
-	initialiseCanvas("example");
-	var cylinderBody = JSM.GenerateCylinder (0.5, 1,100,true, false);
-	var cutBody=JSM.GenerateCuboid(1,0.05,1);
-	var newBody=JSM.BooleanOperation("Difference",cylinderBody,cutBody);
-	AddBodyToViewer(newBody);
-	slice_flag=true;
+/*
+This function is called when the horizontal swipe gesture is detected in Activity 1.
+The rectangle is rotated in the Z axis and added to the previous rectangle.
+A series of rectangles rotated in the Z axis results in a cylinder being formed.
+
+*/
+rotate=function(direction){
+	var transformation;
+	if(direction=="right"){
+		for(degree = final_degree; degree < final_degree+0.02; degree+=0.002){
+			transformation = JSM.RotationZTransformation (degree,new JSM.Coord (0,0,0));
+			body.Transform (transformation);
+			AddBodyToViewer (body);
+		}
+	} 
+	final_degree=degree;
 }
 
-smash=function(direction){
-	removeMeshes();
-	if(direction=="right") 
-		task2_index-=40;
-	else
-		task2_index+=40;
-	var pie1 = JSM.GeneratePie(0.5,1,task2_index* JSM.DegRad,500,true,true);
-	var pie2 = JSM.GeneratePie(0.5,1,task2_index* JSM.DegRad,500,true,true);
-	var transformation = new JSM.Transformation ();
-	transformation = JSM.RotationZTransformation (180* JSM.DegRad,new JSM.Coord (0,0,0));
-	pie1.Transform (transformation);
-	AddBodyToViewer(pie1);
-	AddBodyToViewer(pie2);
-}
-
-stackCylinder=function(){
-	var cylinderBody = JSM.GenerateCylinder (0.5, 0.01,100,true, false);
-	var addition = JSM.TranslationTransformation (new JSM.Coord (0.0, 0.0, activity2_index));
-	var transformation = new JSM.Transformation ();
-	transformation.Append (addition);
-	cylinderBody.Transform (transformation);
-	AddBodyToViewer(cylinderBody);
-	activity2_index+=0.02;
-}
-
+/*
+This function is called each time the vertical swipe gesture is detected in Activity 2.
+A rectangle is translated and added to the previous rectangle.
+This results in multiple rectangles being stacked on top of each other to form a cuboid.
+*/
 stackCuboid=function(){
 	var cuboidBody = new JSM.GenerateCuboid (1, 1, 0.01);
 	var addition = JSM.TranslationTransformation (new JSM.Coord (0.0, 0.0, activity1_index));
@@ -111,12 +97,18 @@ stackCuboid=function(){
 	AddBodyToViewer(cuboidBody);
 	activity1_index+=0.02;
 }
-unstack=function(){
-	var cylinderBody = JSM.GenerateCylinder (0.5, 0.04,100,true, false);
+
+/*
+This function is called each time the vertical swipe gesture is detected in Activity 3.
+The circle is translated and added to the previous circle.
+This results in multiple circle being stacked on top of each other to form a cylinder.
+*/
+stackCylinder=function(){
+	var cylinderBody = JSM.GenerateCylinder (0.5, 0.01,100,true, false);
 	var addition = JSM.TranslationTransformation (new JSM.Coord (0.0, 0.0, activity2_index));
 	var transformation = new JSM.Transformation ();
 	transformation.Append (addition);
 	cylinderBody.Transform (transformation);
 	AddBodyToViewer(cylinderBody);
-	activity2_index-=0.05;
+	activity2_index+=0.02;
 }

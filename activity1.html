@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Leap Web Site</title>
- 	<!-- You should update these links to point to your local files! -->
+    <title>Activity 1 - Rectangle to Cylinder</title>
  
     <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="css/leapstrap.css" />
-    <!-- Custom styles for this template -->
   
      
     <script src="js/jquery-3.0.0.min.js"></script>
@@ -56,14 +54,15 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-8"> <!-- 		Figure Appears here    -->
+		<div class="col-md-8">
 			<div class="panel panel-primary panel-leap">
 				<div class="panel-body">
 				<p></p>
 			<p>
+			<!--The rectangle appears here -->
 			<canvas id="example" class="" width="600" height="350"></canvas>
 			
-		
+			<!--   -->
 			<script>
 			(function(){
 				initialiseCanvas("example");
@@ -92,8 +91,8 @@
 						<div class="alert alert-leap alert-success alert-dismissable leap-interactive" leap-disable-tap="true">
 							<button type="button" class="close leap-interactive" data-dismiss="alert" aria-hidden="true">&times;</button> <strong>Well done!</strong>You can proceed to the next activity or do this activity again. 
 						</div>
-<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity2.html">Proceed&raquo;</a>&nbsp;&nbsp;&nbsp;
-<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity1.html">Restart</a>
+						<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity2.html">Proceed&raquo;</a>&nbsp;&nbsp;&nbsp;
+						<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity1.html">Restart</a>
 						</div>
 					</div>
 				</div>
@@ -157,6 +156,7 @@ Leap.loop(controllerOptions, function(frame) {
 		  //console.log(x);
 		  if(x>y){
 			  x=1;y=2;
+			  // function in gvg.js
 			  rotate("right");
 			  height+=1;
 			  $("#progressBar").css( "width", eval(20+height*10)+"%" );
@@ -171,7 +171,7 @@ Leap.loop(controllerOptions, function(frame) {
           } else { //vertical
                                 
           }
-          console.log(swipeDirection)
+          //console.log(swipeDirection)
        }
      }
   }
@@ -193,9 +193,10 @@ if(frame.pointables.length > 0){
                               window.innerHeight - (normalizedPosition[1] * window.innerHeight), 
                               0];
 	if(windowPosition[0]>=300 && windowPosition[0]<=600  && windowPosition[1]>=10 && windowPosition[1]<=300)
-	        //console.log(vectorToString(windowPosition, 0));        
-	return true;
-	else return false;
+	    //console.log(vectorToString(windowPosition, 0));        
+		return true;
+	else 
+		return false;
 }
 
 }
@@ -209,6 +210,7 @@ function vectorToString(vector, digits) {
              + vector[2].toFixed(digits) + ")";
 }
 
+// Based on the level of the progress bar, the type of hints change 
 function hintGeneration(level){
 var html="";
 switch(level){

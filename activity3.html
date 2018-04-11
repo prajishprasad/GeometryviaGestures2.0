@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Leap Web Site</title>
+    <title>Activity 3 - Circle to Cylinder</title>
  	<!-- You should update these links to point to your local files! -->
  
     <!-- Bootstrap core CSS -->
@@ -61,6 +61,7 @@
 				<div class="panel-body">
 				<p></p>
 			<p>
+			<!--The Circle appears here -->
 			<canvas id="example" class="" width="600" height="300"></canvas>
 			
 		
@@ -92,7 +93,7 @@
 						<div class="alert alert-leap alert-success alert-dismissable leap-interactive" leap-disable-tap="true">
 							<button type="button" class="close leap-interactive" data-dismiss="alert" aria-hidden="true">&times;</button> <strong>Well done!</strong>
 						</div>
-		<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity3.html">Restart</a>
+							<a class="btn btn-primary btn-lg leap-interactive" role="button" href="activity3.html">Restart</a>
 						</div>
 					</div>
 				</div>
@@ -164,13 +165,13 @@ Leap.loop(controllerOptions, function(frame) {
 			  if((20+height*2)>=100){
 				hintGeneration(2);
 			  }
-			  console.log(height);
+			  //console.log(height);
 		  }
               } else {
                   swipeDirection = "down";
               }                  
           }
-          console.log(swipeDirection)
+          //console.log(swipeDirection)
        }
      }
   }
@@ -192,9 +193,10 @@ if(frame.pointables.length > 0){
                               window.innerHeight - (normalizedPosition[1] * window.innerHeight), 
                               0];
 	if(windowPosition[0]>=300 && windowPosition[0]<=600  && windowPosition[1]>=10 && windowPosition[1]<=300)
-	        //console.log(vectorToString(windowPosition, 0));        
-	return true;
-	else return false;
+	    //console.log(vectorToString(windowPosition, 0));        
+		return true;
+	else 
+		return false;
 }
 
 }
@@ -208,6 +210,7 @@ function vectorToString(vector, digits) {
              + vector[2].toFixed(digits) + ")";
 }
 
+// Based on the level of the progress bar, the type of hints change
 function hintGeneration(level){
 var html="";
 switch(level){
